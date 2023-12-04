@@ -11,9 +11,11 @@ namespace Entidades.Exceptions
     {
         public DataBaseManagerException(string? message) : base(message)
         {
+            FileManager.Guardar(message, "log.txt", true);
         }
         public DataBaseManagerException(string? message, Exception? innerException) : base(message, innerException)
         {
+            FileManager.Guardar(message, "log.txt", true);
         }
     }
 }

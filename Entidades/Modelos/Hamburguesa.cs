@@ -8,7 +8,7 @@ using Entidades.DataBase;
 
 namespace Entidades.Modelos
 {
-    public class Hamburguesa 
+    public class Hamburguesa : IComestible
     {
 
         private static int costoBase;
@@ -30,24 +30,15 @@ namespace Entidades.Modelos
 
         public string Ticket => $"{this}\nTotal a pagar:{this.costo}";
 
+        #region Implementar Interfaz
+        public bool Estado => throw new NotImplementedException();
 
+        public string Imagen => throw new NotImplementedException();
 
         private void AgregarIngredientes()
         {
-      
+            this.ingredientes = random.IngredientesAleatorios();
         }
-
-        private string MostrarDatos()
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine($"Hamburguesa {(this.esDoble ? "Doble" : "Simple")}");
-            stringBuilder.AppendLine("Ingredientes: ");
-            this.ingredientes.ForEach(i => stringBuilder.AppendLine(i.ToString()));
-            return stringBuilder.ToString();
-
-        }
-
-
 
         public override string ToString() => this.MostrarDatos();
 
@@ -60,8 +51,18 @@ namespace Entidades.Modelos
         {
             if (!this.estado)
             {
-
+                int i = random.Next(1, 10);
             }
+        }
+        #endregion
+        private string MostrarDatos()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine($"Hamburguesa {(this.esDoble ? "Doble" : "Simple")}");
+            stringBuilder.AppendLine("Ingredientes: ");
+            this.ingredientes.ForEach(i => stringBuilder.AppendLine(i.ToString()));
+            return stringBuilder.ToString();
+
         }
     }
 }

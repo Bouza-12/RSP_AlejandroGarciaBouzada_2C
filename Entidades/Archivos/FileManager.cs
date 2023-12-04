@@ -24,6 +24,7 @@ namespace Entidades.Files
 
         public static void Guardar(string data, string nombreArchivo, bool append)
         {
+            FileManager.ValidaExistenciaDeDirectorio();
             string rutaArchivo = Path.Combine(path, nombreArchivo);
             using (StreamWriter sw = new StreamWriter(rutaArchivo, append))
             {
@@ -32,6 +33,11 @@ namespace Entidades.Files
         }
         public static bool Serializar<T>(T elemento,  string nombreArchivo)
         {
+            string rutaCompleta = Path.Combine(path, nombreArchivo);
+            JsonSerializerOptions options = new JsonSerializerOptions();
+            options.WriteIndented = true;
+            string objetoSerializado = JsonSerializer.Serialize(elemento, options);
+            FileManager.Guardar(objetoSerializado, nombreArchivo, true);
             return true;
         }
         private static void ValidaExistenciaDeDirectorio()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entidades.Files;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,11 @@ using System.Threading.Tasks;
 
 namespace Entidades.Excepciones
 {
-    public class ComidaInvalidaExeption
+    public class ComidaInvalidaExeption : Exception
     {
-
+        public ComidaInvalidaExeption(string? message) : base(message)
+        {
+            FileManager.Guardar(message, "log.txt", true);
+        }
     }
 }
