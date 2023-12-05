@@ -8,9 +8,9 @@ namespace Entidades.MetodosDeExtension
         public static double CalcularCostoIngredientes(this List<EIngrediente> ingredientes, int costoInicial)
         {
             double suma = costoInicial;
-            foreach (var e in ingredientes)
+            foreach (EIngrediente ingrediente in ingredientes)
             {
-                double d = (int)e / 100d;
+                double d = (int)ingrediente / 100d;
                 suma += costoInicial * d;
             }
             return suma;

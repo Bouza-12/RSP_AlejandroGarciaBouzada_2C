@@ -31,27 +31,41 @@ namespace Entidades.Modelos
         public string Ticket => $"{this}\nTotal a pagar:{this.costo}";
 
         #region Implementar Interfaz
-        public bool Estado => throw new NotImplementedException();
+        public bool Estado
+        {
+            get { return this.estado; }
+        }
 
-        public string Imagen => throw new NotImplementedException();
+        public string Imagen { get { return this.imagen; } }
 
         private void AgregarIngredientes()
         {
-            this.ingredientes = random.IngredientesAleatorios();
+            this.ingredientes = this.random.IngredientesAleatorios();
         }
 
         public override string ToString() => this.MostrarDatos();
 
         public void FinalizarPreparacion(string cocinero)
         {
-
+            this.costo = ingredientes.CalcularCostoIngredientes(Hamburguesa.costoBase);
+            this.estado = !this.estado;
         }
 
         public void IniciarPreparacion()
         {
             if (!this.estado)
             {
-                int i = random.Next(1, 10);
+                int i = random.Next(1, 9);
+                try
+                {
+                    this.imagen = DataBaseManager.GetImagenComida($"Hamburguesa_{i}");
+                }
+                catch (DataBaseManagerException ex)
+                {
+                    FileManager.Guardar(ex.Message, "log.txt", true);
+                }
+
+                this.AgregarIngredientes();
             }
         }
         #endregion

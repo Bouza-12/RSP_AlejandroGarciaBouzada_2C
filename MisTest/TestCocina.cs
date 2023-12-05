@@ -12,9 +12,10 @@ namespace MisTest
         public void AlGuardarUnArchivo_ConNombreInvalido_TengoUnaExcepcion()
         {
             //arrange
-
+            Cocinero<Hamburguesa> cocinero = new Cocinero<Hamburguesa>("John");
             //act
 
+            FileManager.Guardar(cocinero.ToString(), "cocineroJhon",false);
             //assert
         }
 
@@ -23,11 +24,12 @@ namespace MisTest
         public void AlInstanciarUnCocinero_SeEspera_PedidosCero()
         {
             //arrange
-
+            Cocinero<Hamburguesa> cocinero = new Cocinero<Hamburguesa>("John");
 
             //act
 
             //assert
+            Assert.AreEqual(0, cocinero.CantPedidosFinalizados);
         }
     }
 }

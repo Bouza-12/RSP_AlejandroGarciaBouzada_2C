@@ -26,11 +26,16 @@ namespace FrmView
         //en el formulario los datos de la comida
         private void MostrarComida(IComestible comida)
         {
-
-            this.comidas.Enqueue(comida);
-            this.pcbComida.Load(comida.Imagen);
-            this.rchElaborando.Text = comida.ToString();
-
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(() => MostrarComida(comida));
+            }
+            else
+            {
+                this.comidas.Enqueue(comida);
+                this.pcbComida.Load(comida.Imagen);
+                this.rchElaborando.Text = comida.ToString();
+            }
         }
 
 
@@ -39,13 +44,15 @@ namespace FrmView
         //en el fomrulario el tiempo transucurrido
         private void MostrarConteo(double tiempo)
         {
-
-
-            this.lblTiempo.Text = $"{tiempo} segundos";
-            this.lblTmp.Text = $"{this.hamburguesero.TiempoMedioDePreparacion.ToString("00.0")} segundos";
-
-
-
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(() => MostrarConteo(tiempo));
+            }
+            else
+            {
+                this.lblTiempo.Text = $"{tiempo} segundos";
+                this.lblTmp.Text = $"{this.hamburguesero.TiempoMedioDePreparacion.ToString("00.0")} segundos";
+            }
         }
 
         private void ActualizarAtendidos(IComestible comida)
@@ -87,7 +94,15 @@ namespace FrmView
         private void FrmView_FormClosing(object sender, FormClosingEventArgs e)
         {
             //Alumno: Serializar el cocinero antes de cerrar el formulario
-
+            try
+            {
+                FileManager.Serializar(this.hamburguesero, "cocinero.json");
+            }
+            catch (FileManagerException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                FileManager.Guardar(ex.Message, "logs.txt", true);
+            }
         }
     }
 }

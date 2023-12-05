@@ -18,27 +18,38 @@ namespace Entidades.Files
 
         static FileManager() 
         {
-            path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "SP_07122023_AlejandroGarciaBozuada");
+            FileManager.path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "SP_07122023_AlejandroGarciaBozuada");
             FileManager.ValidaExistenciaDeDirectorio();
         }
 
         public static void Guardar(string data, string nombreArchivo, bool append)
         {
-            FileManager.ValidaExistenciaDeDirectorio();
-            string rutaArchivo = Path.Combine(path, nombreArchivo);
-            using (StreamWriter sw = new StreamWriter(rutaArchivo, append))
+            try
             {
-                sw.WriteLine(data);
+                string rutaArchivo = Path.Combine(path, nombreArchivo);
+                using (StreamWriter sw = new StreamWriter(rutaArchivo, append))
+                {
+                    sw.WriteLine(data);
+                }
+            }catch(Exception e)
+            {
+                throw new FileManagerException("Error al guardar el archivo", e);
             }
         }
         public static bool Serializar<T>(T elemento,  string nombreArchivo)
         {
-            string rutaCompleta = Path.Combine(path, nombreArchivo);
-            JsonSerializerOptions options = new JsonSerializerOptions();
-            options.WriteIndented = true;
-            string objetoSerializado = JsonSerializer.Serialize(elemento, options);
-            FileManager.Guardar(objetoSerializado, nombreArchivo, true);
-            return true;
+            try
+            {
+                JsonSerializerOptions options = new JsonSerializerOptions();
+                options.WriteIndented = true;
+                string objetoSerializado = JsonSerializer.Serialize(elemento, typeof(T), options);
+                FileManager.Guardar(objetoSerializado, nombreArchivo, false);
+                return true;
+            }
+            catch(Exception e)
+            {
+                throw new FileManagerException("Error al serializar el json", e);
+            }
         }
         private static void ValidaExistenciaDeDirectorio()
         {
@@ -48,7 +59,6 @@ namespace Entidades.Files
                 {
                     Directory.CreateDirectory(path);
                 }
-
             }
             catch
             {
