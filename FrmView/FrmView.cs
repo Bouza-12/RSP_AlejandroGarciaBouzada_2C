@@ -55,11 +55,19 @@ namespace FrmView
             }
         }
 
+        /// <summary>
+        /// Actualiza el texto de la lista de pedidos completados
+        /// </summary>
+        /// <param name="comida"></param>
         private void ActualizarAtendidos(IComestible comida)
         {
             this.rchFinalizados.Text += "\n" + comida.Ticket;
         }
-
+        /// <summary>
+        /// Crea un cocinero e inicia la primera orden
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAbrir_Click(object sender, EventArgs e)
         {
             if (!this.hamburguesero.HabilitarCocina)
@@ -74,7 +82,11 @@ namespace FrmView
             }
 
         }
-
+        /// <summary>
+        /// Finaliza el menu actual y lo muestra en atendidos
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnSiguiente_Click(object sender, EventArgs e)
         {
             if (this.comidas.Count > 0)
@@ -90,7 +102,11 @@ namespace FrmView
             }
 
         }
-
+        /// <summary>
+        /// Cierra la cocina, no se aceptan más pedidos
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FrmView_FormClosing(object sender, FormClosingEventArgs e)
         {
             //Alumno: Serializar el cocinero antes de cerrar el formulario

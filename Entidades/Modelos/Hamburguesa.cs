@@ -10,7 +10,7 @@ namespace Entidades.Modelos
 {
     public class Hamburguesa : IComestible
     {
-
+        //Atributos
         private static int costoBase;
         private bool esDoble;
         private double costo;
@@ -20,7 +20,7 @@ namespace Entidades.Modelos
         Random random;
         static Hamburguesa() => Hamburguesa.costoBase = 1500;
 
-
+        //Constructor
         public Hamburguesa() : this(false) { }
         public Hamburguesa(bool esDoble)
         {
@@ -28,6 +28,7 @@ namespace Entidades.Modelos
             this.random = new Random();
         }
 
+        //Propiedades
         public string Ticket => $"{this}\nTotal a pagar:{this.costo}";
 
         #region Implementar Interfaz
@@ -38,19 +39,28 @@ namespace Entidades.Modelos
 
         public string Imagen { get { return this.imagen; } }
 
+        //Métodos
+        /// <summary>
+        /// Asigna ingredientes aleatorios a la instancia
+        /// </summary>
         private void AgregarIngredientes()
         {
             this.ingredientes = this.random.IngredientesAleatorios();
         }
 
-        public override string ToString() => this.MostrarDatos();
-
+        /// <summary>
+        /// Cambia el estado de la instancia
+        /// Calcula el costo del menu
+        /// </summary>
+        /// <param name="cocinero"></param>
         public void FinalizarPreparacion(string cocinero)
         {
             this.costo = ingredientes.CalcularCostoIngredientes(Hamburguesa.costoBase);
             this.estado = !this.estado;
         }
-
+        /// <summary>
+        /// Asigna una imagen e ingredientes aleatorios  
+        /// </summary>
         public void IniciarPreparacion()
         {
             if (!this.estado)
@@ -69,6 +79,10 @@ namespace Entidades.Modelos
             }
         }
         #endregion
+        /// <summary>
+        /// Estilo para mostrar los datos de la instancia
+        /// </summary>
+        /// <returns></returns>
         private string MostrarDatos()
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -78,5 +92,10 @@ namespace Entidades.Modelos
             return stringBuilder.ToString();
 
         }
+        /// <summary>
+        /// Sobre escritura del método ToString para mostrar los datos deseados
+        /// </summary>
+        /// <returns>Datos de la instancia</returns>
+        public override string ToString() => this.MostrarDatos();
     }
 }

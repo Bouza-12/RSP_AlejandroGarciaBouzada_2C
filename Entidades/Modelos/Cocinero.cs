@@ -7,9 +7,10 @@ namespace Entidades.Modelos
 {
 
     public delegate void DelegadoDemoraAtencion(double tiempo);
-    public delegate void DelegadoNuevoIngreso(IComestible ingrediente);
+    public delegate void DelegadoNuevoIngreso(IComestible hamburguesa);
     public class Cocinero<T> where T : IComestible, new()
     {
+        //Atributos
         private int cantPedidosFinalizados;
         private string nombre;
         private double demoraPreparacionTotal;
@@ -17,11 +18,18 @@ namespace Entidades.Modelos
         private T menu;
         private Task tarea;
 
+        //Eventos
+        public event DelegadoDemoraAtencion OnDemora;
+        public event DelegadoNuevoIngreso OnIngreso;
+
+        //Constructor
         public Cocinero(string nombre)
         {
             this.nombre = nombre;
         }
 
+
+        //Propiedades
         //No hacer nada
         public bool HabilitarCocina
         {
@@ -50,26 +58,38 @@ namespace Entidades.Modelos
         public string Nombre { get => nombre; }
         public int CantPedidosFinalizados { get => cantPedidosFinalizados; }
 
+        //Métodos
+        /// <summary>
+        /// Crea un hilo secundario para ejecutar los eventos
+        /// </summary>
         private void IniciarIngreso()
         {
             CancellationToken token = this.cancellation.Token;
             this.tarea = Task.Run(() =>
             {
-                this.NotificarNuevoIngreso();
-                this.EsperarProximoIngreso();
-                this.cantPedidosFinalizados++;
-                try
+                while (!this.cancellation.IsCancellationRequested)
                 {
-                    DataBase.DataBaseManager.GuardarTicket(this.nombre, this.menu);
-                }
-                catch(DataBaseManagerException ex)
-                {
-                    FileManager.Guardar(ex.Message, "log.txt", true);
+                    this.NotificarNuevoIngreso();
+                    this.EsperarProximoIngreso();
+                    this.cantPedidosFinalizados++;
+                    try
+                    {
+                        DataBase.DataBaseManager.GuardarTicket(this.nombre, this.menu);
+                    }
+                    catch (DataBaseManagerException ex)
+                    {
+                        FileManager.Guardar(ex.Message, "log.txt", true);
+                    }
+
                 }
             },token);
          
         }
 
+        /// <summary>
+        /// Crea un nuevo menu y comienza el evento que cuenta cuanto demora
+        /// envía el evento al receptor
+        /// </summary>
         private void NotificarNuevoIngreso()
         {
             if (this.OnIngreso is not null)
@@ -79,6 +99,9 @@ namespace Entidades.Modelos
                 this.OnIngreso.Invoke(this.menu);
             }
         }
+        /// <summary>
+        /// Comienza un contador de segundos y el evento OnDemora envía el mensaje
+        /// </summary>
         private void EsperarProximoIngreso()
         {
             int tiempoEspera = 0;
@@ -89,13 +112,7 @@ namespace Entidades.Modelos
                 Thread.Sleep(1000);
                 this.OnDemora.Invoke(tiempoEspera);
             }
-
             this.demoraPreparacionTotal += tiempoEspera;
-
         }
-
-        public event DelegadoDemoraAtencion OnDemora;
-        public event DelegadoNuevoIngreso OnIngreso;
-
     }
 }

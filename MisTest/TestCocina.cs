@@ -13,10 +13,10 @@ namespace MisTest
         {
             //arrange
             Cocinero<Hamburguesa> cocinero = new Cocinero<Hamburguesa>("John");
+            
             //act
-
-            FileManager.Guardar(cocinero.ToString(), "cocineroJhon",false);
-            //assert
+            //Uso 2 caracteres no permitido para crear una carpeta
+            FileManager.Guardar(cocinero.ToString(), "cocinero*/+erxe",false);
         }
 
         [TestMethod]
