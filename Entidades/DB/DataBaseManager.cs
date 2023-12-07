@@ -52,7 +52,7 @@ namespace Entidades.DataBase
             }
             catch (ComidaInvalidaExeption ex)
             {
-                throw new DataBaseManagerException("Error al leer", ex);
+                throw new DataBaseManagerException("Error al leer de la Base de Datos", ex);
             }
         }
         /// <summary>
@@ -82,7 +82,7 @@ namespace Entidades.DataBase
             }
             catch (Exception ex)
             {
-                throw new DataBaseManagerException("Error al escribir", ex);
+                throw new DataBaseManagerException("Error al escribir en la Base de Datos", ex);
             }
         }
     }

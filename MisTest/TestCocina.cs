@@ -16,7 +16,7 @@ namespace MisTest
             
             //act
             //Uso 2 caracteres no permitido para crear una carpeta
-            FileManager.Guardar(cocinero.ToString(), "cocinero*/+erxe",false);
+            FileManager.Guardar(cocinero.ToString(), "cocinero*/<>exe",false);
         }
 
         [TestMethod]

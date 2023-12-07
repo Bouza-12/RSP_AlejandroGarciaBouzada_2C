@@ -8,17 +8,16 @@ namespace FrmView
 {
     public partial class FrmView : Form
     {
-        private Queue<IComestible> comidas;
+        private IComestible comida;
         Cocinero<Hamburguesa> hamburguesero;
 
         public FrmView()
         {
             InitializeComponent();
-            this.comidas = new Queue<IComestible>();
             this.hamburguesero = new Cocinero<Hamburguesa>("Ramon");
             //Alumno - agregar manejadores al cocinero
             this.hamburguesero.OnDemora += this.MostrarConteo;
-            this.hamburguesero.OnIngreso += this.MostrarComida;
+            this.hamburguesero.OnPedido += this.MostrarComida;
         }
 
 
@@ -32,7 +31,7 @@ namespace FrmView
             }
             else
             {
-                this.comidas.Enqueue(comida);
+                this.comida = comida;
                 this.pcbComida.Load(comida.Imagen);
                 this.rchElaborando.Text = comida.ToString();
             }
@@ -59,10 +58,10 @@ namespace FrmView
         /// Actualiza el texto de la lista de pedidos completados
         /// </summary>
         /// <param name="comida"></param>
-        private void ActualizarAtendidos(IComestible comida)
-        {
-            this.rchFinalizados.Text += "\n" + comida.Ticket;
-        }
+        //private void ActualizarAtendidos(IComestible comida)
+        //{
+        //    this.rchFinalizados.Text += "\n" + comida.Ticket;
+        //}
         /// <summary>
         /// Crea un cocinero e inicia la primera orden
         /// </summary>
@@ -89,12 +88,11 @@ namespace FrmView
         /// <param name="e"></param>
         private void btnSiguiente_Click(object sender, EventArgs e)
         {
-            if (this.comidas.Count > 0)
+            if (this.comida is not null)
             {
-
-                IComestible comida = this.comidas.Dequeue();
                 comida.FinalizarPreparacion(this.hamburguesero.Nombre);
-                this.ActualizarAtendidos(comida);
+                this.rchFinalizados.Text += "\n" + comida.Ticket;
+                this.comida = null;
             }
             else
             {
