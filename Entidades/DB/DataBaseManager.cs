@@ -14,7 +14,7 @@ namespace Entidades.DataBase
         //Constructor
         static DataBaseManager()
         {
-            DataBaseManager.stringConnection = "Server=DESKTOP-3LVM66M;Database=20230622SP;Trusted_Connection=True;";
+            DataBaseManager.stringConnection = "Server=.;Database=20230622SP;Trusted_Connection=True;";
         }
 
         //Métodos
